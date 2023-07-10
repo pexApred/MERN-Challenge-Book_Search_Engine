@@ -7,7 +7,7 @@ import {
   Card,
   Row
 } from 'react-bootstrap';
-
+import { searchGoogleBooks } from '../utils/API';
 import Auth from '../utils/auth';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 
@@ -39,7 +39,7 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await searchedBooks(searchInput);
+      const response = await searchGoogleBooks(searchInput);
 
       if (!response.ok) {
         throw new Error('something went wrong!');
@@ -122,8 +122,8 @@ const SearchBooks = () => {
         <Row>
           {searchedBooks.map((book) => {
             return (
-              <Col md="4">
-                <Card key={book.bookId} border='dark'>
+              <Col key={book.bookId} md="4">
+                <Card border='dark'>
                   {book.image ? (
                     <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' />
                   ) : null}
