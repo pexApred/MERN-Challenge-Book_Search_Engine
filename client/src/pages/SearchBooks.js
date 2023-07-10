@@ -80,7 +80,7 @@ const SearchBooks = () => {
         });
 
       // if book successfully saves to user's account, save book id to state
-      setSavedBookIds([...savedBookIds, data.saveBook.bookId]);
+      setSavedBookIds([...savedBookIds, saveBookMutation.bookId]);
     } catch (err) {
       console.error(err);
     }
@@ -122,8 +122,8 @@ const SearchBooks = () => {
         <Row>
           {searchedBooks.map((book) => {
             return (
-              <Col key={book.bookId} md="4">
-                <Card border='dark'>
+              <Col md="4">
+                <Card key={book.bookId} border='dark'>
                   {book.image ? (
                     <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' />
                   ) : null}
