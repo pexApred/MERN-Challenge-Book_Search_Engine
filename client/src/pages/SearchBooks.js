@@ -23,12 +23,12 @@ const SearchBooks = () => {
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
 
-  const [saveBookMutation, { error }] = useMutation(SAVE_BOOK);
+  const [saveBook, { error }] = useMutation(SAVE_BOOK);
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
     return () => saveBookIds(savedBookIds);
-  }, [savedBookIds]);
+  });
 
   // create method to search for books and set state on form submit
   const handleFormSubmit = async (event) => {
@@ -75,12 +75,12 @@ const SearchBooks = () => {
     }
 
     try {
-      const { data } = await saveBookMutation({
+      const { data } = await saveBook({
         variables: { bookData: { ...bookToSave } },
         });
 
       // if book successfully saves to user's account, save book id to state
-      setSavedBookIds([...savedBookIds, saveBookMutation.bookId]);
+      setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
       console.error(err);
     }
@@ -122,8 +122,8 @@ const SearchBooks = () => {
         <Row>
           {searchedBooks.map((book) => {
             return (
-              <Col md="4">
-                <Card key={book.bookId} border='dark'>
+              <Col md="4" key={book.bookId}>
+                <Card border='dark'>
                   {book.image ? (
                     <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' />
                   ) : null}
