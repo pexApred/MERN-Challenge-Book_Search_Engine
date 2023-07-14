@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import Auth from '../utils/auth';
+import AuthService from '../utils/auth';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
@@ -25,8 +25,6 @@ const SignupForm = () => {
     // console.log(...userFormData)
     // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
-    console.log("form ", form)
-    console.log("Valid Form? ", form.checkValidity())
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
@@ -35,10 +33,11 @@ const SignupForm = () => {
       const { data } = await addUser({
         variables: { ...userFormData },
       });
+      console.log("Spread: ", userFormData)
       if (data.createUser?.token) {
-        Auth.login(data.createUser.token);
+        AuthService.login(data.createUser.token);
       }
-      navigate('/')
+      console.log(data)
     } catch (err) {
       console.error(err);
       setShowAlert(true);
@@ -48,6 +47,7 @@ const SignupForm = () => {
       email: '',
       password: '',
     });
+    navigate('/');
   };
 
   return (
@@ -100,6 +100,7 @@ const SignupForm = () => {
         <Button
           disabled={!(userFormData.username && userFormData.email && userFormData.password)}
           type='submit'
+          onClick={handleFormSubmit}
           variant='success'>
           Submit
         </Button>

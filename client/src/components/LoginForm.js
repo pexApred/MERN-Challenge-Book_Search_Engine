@@ -3,13 +3,15 @@ import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/mutations'
-import Auth from '../utils/auth';
+import AuthService from '../utils/auth';
+import { useNavigate } from 'react-router-dom';
 
-const LoginForm = () => {
+const LoginForm = ({ setShowModal }) => {
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
-  const [validated] = useState(false);
+  const [validated, setValidated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [loginUser, { error }] = useMutation(LOGIN_USER);
+  const navigate = useNavigate()
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -22,20 +24,21 @@ const LoginForm = () => {
     // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
-    }
-
+    } else {
     try {
       const { data } = await loginUser({
         variables: { ...userFormData },
       });
-
-      Auth.login(data.login.token);
+      AuthService.login(data.login.token); 
+      setShowModal(false);   
+      navigate('/');
     } catch (err) {
       console.error(err);
+      setShowAlert(true);
     }
-
+  }
+  setValidated(true);
     setUserFormData({
       // username: '',
       email: '',
