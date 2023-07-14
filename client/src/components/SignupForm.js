@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-
+import Auth from '../utils/auth';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
-import Auth from '../utils/auth';
 
 const SignupForm = () => {
   // set initial form state
@@ -13,6 +13,7 @@ const SignupForm = () => {
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
   const [addUser, { error }] = useMutation(ADD_USER);
+  const navigate = useNavigate()
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -21,27 +22,27 @@ const SignupForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-
+    // console.log(...userFormData)
     // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
+    console.log("form ", form)
+    console.log("Valid Form? ", form.checkValidity())
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     }
-
     try {
       const { data } = await addUser({
         variables: { ...userFormData },
       });
-
       if (data.createUser?.token) {
         Auth.login(data.createUser.token);
       }
+      navigate('/')
     } catch (err) {
       console.error(err);
       setShowAlert(true);
     }
-
     setUserFormData({
       username: '',
       email: '',

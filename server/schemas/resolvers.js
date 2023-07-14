@@ -8,8 +8,8 @@ module.exports = {
     Query: {
         // get a single user by either their id or their username
         me: async (parent, args, context) => {
-            console.log(args);
-            console.log(context);
+            console.log("Args", args);
+            console.log("context", context);
                 if (context.User) {
                     const foundUserData = await User.findOne({ _id: context.user.id }).select('-__v -password');
                 return foundUserData;    
@@ -30,7 +30,7 @@ module.exports = {
         },
         // login a user, sign a token, and send it back (to client/src/components/LoginForm.js)
         login: async (parent, { email, password }) => {
-                const user = await User.findOne({email });
+                const user = await User.findOne({ email });
                 if (!user) {
                     throw new Error("Can't find this user");
                 }
@@ -45,11 +45,14 @@ module.exports = {
         // save a book to a user's `savedBooks` field by adding it to the set (to prevent duplicates)
         saveBook: async (parent, { bookData }, context) => {
                 if (context.user) {
+                    console.log(bookData);
+                    console.log("Context.user", context.user)
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
                     { $push: { savedBooks: bookData } },
                     { new: true }
                 );
+                console.log("Updated User", updatedUser);
                 return updatedUser;
                 }
                 throw new AuthenticationError("You need to be logged in!")
