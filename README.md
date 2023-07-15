@@ -44,10 +44,12 @@ JWT_SECRET=<your-jwt-secret>
 4. Click on the ``Login/Signup`` to fill out form and submit
 5. Once logged in, the menu will update and allow you to see your saved books and logout
 6. Searched results will now have a save button to save to your account
+7. Screenshots below:
 
-    ```md
-    ![](assets/images/screenshot.png)
-    ```
+    ![Landing Page](./screenshots/Screenshot%202023-07-15%20at%201.50.45%20PM.png)
+    ![Search for Books](./screenshots/Screenshot%202023-07-15%20at%201.51.46%20PM.png)
+    ![Save Book Function](./screenshots/Screenshot%202023-07-15%20at%201.52.02%20PM.png)
+    ![Saved Books Page](./screenshots/Screenshot%202023-07-15%20at%201.52.12%20PM.png)
 
 ## Features
 
