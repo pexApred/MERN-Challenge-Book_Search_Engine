@@ -10,7 +10,6 @@ import {
 import { searchGoogleBooks } from '../utils/API';
 import AuthService from '../utils/auth';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
-import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { SAVE_BOOK } from '../utils/mutations';
 
@@ -24,7 +23,6 @@ const SearchBooks = () => {
   // create mutation to save book to user's account
   const [saveBook, { error }] = useMutation(SAVE_BOOK);
   // redirect to login page if user isn't logged in
-  const navigate = useNavigate();
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
@@ -75,9 +73,7 @@ const SearchBooks = () => {
       const { data } = await saveBook({
         variables: { bookData: { ...bookToSave } },
 
-        });        
-        console.log("Book Data", ...bookToSave)
-        console.log("Data", data, "Book Data ID ", data.saveBook.bookId);
+      });
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
@@ -119,9 +115,9 @@ const SearchBooks = () => {
             : 'Search for a book to begin'}
         </h2>
         <Row>
-          {searchedBooks.map((book) => {
+          {searchedBooks.map((book, index) => {
             return (
-              <Col md="4" key={book.bookId}>
+              <Col md="4" key={`${book.bookId}-${index}`}>
                 <Card border='dark'>
                   {book.image ? (
                     <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' />

@@ -23,7 +23,7 @@ module.exports = {
     try {
       const { data } = jwt.verify(token, secret, { expiresIn: expiration });
       req.user = data;
-    } catch {
+    } catch (err){
       console.log('Invalid token', err);
       throw new Error('invalid token!');
     }
