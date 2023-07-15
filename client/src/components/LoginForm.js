@@ -1,10 +1,11 @@
 // see SignupForm.js for comments
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/mutations'
 import AuthService from '../utils/auth';
 import { useNavigate } from 'react-router-dom';
+import Context from '../utils/Context';
 
 const LoginForm = ({ setShowModal }) => {
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
@@ -12,6 +13,7 @@ const LoginForm = ({ setShowModal }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [loginUser, { error }] = useMutation(LOGIN_USER);
   const navigate = useNavigate()
+  const { setLoggedIn } = useContext(Context);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -31,6 +33,7 @@ const LoginForm = ({ setShowModal }) => {
         variables: { ...userFormData },
       });
       AuthService.login(data.login.token); 
+      setLoggedIn(true);
       setShowModal(false);   
       navigate('/');
     } catch (err) {

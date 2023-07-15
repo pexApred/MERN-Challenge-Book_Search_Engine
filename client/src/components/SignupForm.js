@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import AuthService from '../utils/auth';
 import { CREATE_USER } from '../utils/mutations';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
+import Context from '../utils/Context';
 
 const SignupForm = ({setShowModal}) => {
   // set initial form state
@@ -19,7 +20,7 @@ const SignupForm = ({setShowModal}) => {
   const [createUser, { error }] = useMutation(CREATE_USER);
 
   const navigate = useNavigate()
-
+  const { setLoggedIn } = useContext(Context);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
@@ -45,6 +46,7 @@ const SignupForm = ({setShowModal}) => {
       console.log(data);
       AuthService.login(data.createUser.token);
       navigate('/');
+      setLoggedIn(true);
       setShowModal(false);
     } catch (err) {
       console.error(err);

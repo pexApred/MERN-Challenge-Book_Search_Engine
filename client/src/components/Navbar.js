@@ -1,20 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, Container, Modal, Tab } from 'react-bootstrap';
 import SignUpForm from './SignupForm';
 import LoginForm from './LoginForm';
 import { useNavigate } from 'react-router-dom';
 import AuthService from '../utils/auth';
+import Context from '../utils/Context';
 
 const AppNavbar = () => {
   // set modal display state
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const { loggedIn, setLoggedIn } = useContext(Context);
 
   const handleLogout = () => {
     console.log("Logout clicked")
     AuthService.logout();
     navigate('/');
+    setLoggedIn(false);
     setShowModal(false);
   };
 
@@ -32,7 +35,7 @@ const AppNavbar = () => {
                 Search For Books
               </Nav.Link>
               {/* if user is logged in show saved books and logout */}
-              {AuthService.loggedIn() ? (
+              {loggedIn ? (
                 <>
                   <Nav.Link as={Link} to='/saved'>
                     See Your Books
