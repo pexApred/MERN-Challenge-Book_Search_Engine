@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
-
+const dotenv = require('dotenv');
+const { AuthenticationError } = require('apollo-server-express');
 // set token secret and expiration date
-const secret = 'mysecretsshhhhh';
-const expiration = '2h';
+dotenv.config();
+const secret = process.env.JWT_SECRET;
+const expiration = '24h';
 
 module.exports = {
   // function for our authenticated routes
@@ -25,7 +27,7 @@ module.exports = {
       req.user = data;
     } catch (err){
       console.log('Invalid token', err);
-      throw new Error('invalid token!');
+      throw new AuthenticationError('invalid token!');
     }
     // send to next endpoint
     return req;
